@@ -122,7 +122,7 @@ MonoBehaviour:
   projectilePrefab: {fileID: 2192014256540078645, guid: 282bba27a16f3e044b6f215b3ddec4cf, type: 3}
   firePoint: {fileID: 849707613833363158}
   projectileSpeed: 10
-  detectionRange: 2
+  detectionSize: {x: 4, y: 4}
   enemyLayer:
     serializedVersion: 2
     m_Bits: 64
