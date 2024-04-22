@@ -5,6 +5,7 @@ public class EnemySpawner : MonoBehaviour
 {
     public GameObject enemyPrefab; // 적 프리팹
     public float spawnInterval = 2f; // 스폰 간격
+    public int numberOfEnemiesToSpawn = 20; // 스폰할 적의 수
 
     private void Start()
     {
@@ -14,7 +15,7 @@ public class EnemySpawner : MonoBehaviour
     // 일정 간격으로 적을 스폰하는 코루틴
     IEnumerator SpawnEnemies()
     {
-        while (true)
+        for (int i = 0; i < numberOfEnemiesToSpawn; i++)
         {
             // 스폰 위치를 Enemy Spawner의 위치로 설정합니다.
             Vector3 spawnPosition = transform.position;
