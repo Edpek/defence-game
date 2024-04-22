@@ -10,7 +10,7 @@ public class Detection : MonoBehaviour
 
     private Animator animator;
 
-    public float detectionRange = 2f; // 적 감지 범위
+    public Vector2 detectionSize = new Vector2(4f, 2f); // 감지 범위 크기 (가로, 세로)
     public LayerMask enemyLayer; // 적 레이어
 
     private void Start()
@@ -19,19 +19,25 @@ public class Detection : MonoBehaviour
         StartCoroutine(ScanForEnemies());
     }
 
-    // 2 범위 내의 적을 스캔하고 isAttacking을 변경하는 코루틴
+    // 사각형 범위 내의 적을 스캔하고 isAttacking을 변경하는 코루틴
     private IEnumerator ScanForEnemies()
     {
         while (true)
         {
-            Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(transform.position, detectionRange, enemyLayer);
+            // 사각형 영역 내에 있는 적을 검출합니다.
+            Collider2D[] hitEnemies = Physics2D.OverlapBoxAll(transform.position, detectionSize, 0f, enemyLayer);
 
             if (hitEnemies.Length > 0)
             {
                 // 범위 내에 적이 있으면 isAttacking을 true로 변경
                 animator.SetBool("IsAttacking", true);
                 // 발사체 발사
-                ShootProjectile(hitEnemies[0].transform.position);
+                foreach (var enemyCollider in hitEnemies)
+                {
+                    Vector3 enemyPosition = enemyCollider.transform.position;
+                    Vector2 direction = ((Vector2)enemyPosition - (Vector2)firePoint.position).normalized;
+                    ShootProjectile(enemyPosition, direction);
+                }
             }
             else
             {
@@ -44,12 +50,12 @@ public class Detection : MonoBehaviour
     }
 
     // 발사체를 생성하고 적에게 발사하는 메서드
-    private void ShootProjectile(Vector3 targetPosition)
+    private void ShootProjectile(Vector3 targetPosition, Vector2 direction)
     {
         // 발사체를 생성합니다.
         GameObject projectile = Instantiate(projectilePrefab, firePoint.position, Quaternion.identity);
         // 발사체의 방향을 적의 위치를 향해 설정합니다.
-        Vector2 direction = ((Vector2)targetPosition - (Vector2)firePoint.position).normalized;
+        projectile.transform.up = direction;
         // 발사체에 속도를 적용합니다.
         projectile.GetComponent<Rigidbody2D>().velocity = direction * projectileSpeed;
     }
@@ -58,6 +64,7 @@ public class Detection : MonoBehaviour
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, detectionRange);
+        // 감지 범위를 사각형 모양으로 그립니다.
+        Gizmos.DrawWireCube(transform.position, detectionSize);
     }
 }

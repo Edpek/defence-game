@@ -119,8 +119,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ecf2fdc8a26468c4d87df7814a94bc46, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  projectilePrefab: {fileID: 0}
-  firePoint: {fileID: 0}
+  projectilePrefab: {fileID: 2192014256540078645, guid: 282bba27a16f3e044b6f215b3ddec4cf, type: 3}
+  firePoint: {fileID: 849707613833363158}
   projectileSpeed: 10
   detectionRange: 2
   enemyLayer:
